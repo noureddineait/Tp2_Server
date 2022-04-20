@@ -1,0 +1,14 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+     Layout = "_Layout";
+    ViewBag.Title = "HOME";
+}
+<h1 class="bg-info border d-flex aligns-items-center">Application pour Medecin, Veuillez vous connectez ou creer un compte</h1>
+<div class="container">
+    <a class="btn btn-primary" href="~/Account/Register">Register</a>    
+    <a class="btn btn-primary" href="~/Account/Login">Login</a>    
+</div>
