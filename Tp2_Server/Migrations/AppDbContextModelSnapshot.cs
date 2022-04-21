@@ -291,7 +291,7 @@ namespace Tp2_Server.Migrations
                     b.Property<string>("Nom")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Prénom")
+                    b.Property<string>("Prenom")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Ville")

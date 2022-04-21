@@ -1,0 +1,26 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+     Layout = "_Layout";
+     ViewBag.Title = "Information Patient";
+}
+@model Tp2_Server.Models.Patient
+<h1 class="bg-info border d-flex aligns-items-center">Information de @Model.Nom </h1>
+
+<div class="container-fluid">
+    <div class="d-flex flex-row">
+        <div class=" mb-3  mt-3 col-3">
+            <img src="./iconProfil.jpg" alt="Icon" class="rounded-circle img-thumbnail" width="200" height="200"/>
+        </div> 
+        <div class=" mb-3 me-5 mt-3 sm-col">
+            <label class="fw-bold fs-3"><span class="text-primary">Nom Complet : </span>@Model.Nom @Model.Prenom</label> 
+            <label class="fw-bold fs-3"><span class="text-primary">Date de Naissance : </span>@Model.Date</label>
+            <label class="fw-bold fs-3"><span class="text-primary">Genre : </span>@Model.Genre</label>
+            <label class="fw-bold fs-3"><span class="text-primary">Ville : </span>@Model.Ville</label> 
+            <a class="btn btn-primary" href="~/Home/AjoutPatient">Retour</a> 
+        </div>
+    </div>
+</div>

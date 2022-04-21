@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Tp2_Server.Migrations
 {
-    public partial class createDB : Migration
+    public partial class CreateDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -250,7 +250,7 @@ namespace Tp2_Server.Migrations
                     DiagnosticID = table.Column<int>(type: "int", nullable: true),
                     Nom = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Prénom = table.Column<string>(type: "longtext", nullable: true)
+                    Prenom = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Date = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),

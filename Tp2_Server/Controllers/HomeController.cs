@@ -2,14 +2,14 @@
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Principal;
 using Tp2_Server.Models;
-
+using System.Web;
 namespace Tp2_Server.Controllers
 {
     public class HomeController : Controller
-    {
-        Models.Medecin medecin;
-        //Models.Medecin m;
+    { 
+        Medecin medecin;
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly AppDbContext appDbContext;
@@ -19,55 +19,73 @@ namespace Tp2_Server.Controllers
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.appDbContext = appDbContext;
-            //Console.WriteLine("User.Identity.Name");
-            //var t=User.Identity.Name;
-            //medecin = appDbContext.Medecins.Where(m => m.Mail.ToLower() == User.Identity.Name.ToString().ToLower()).First();
-            //Console.WriteLine("");
-            //m = new Models.Medecin() { Nom = "Yasmine", Prenom = "Outtassi", Mail = "noureddinelhaj@gmail.com", Genre = "Male", Date = "13/05/1999", Ville = "Rimouski", Date_Entree = "19/10/2005" };
-            //TempData["myMedecin"] = JsonConvert.SerializeObject("");
-            //medecin = JsonConvert.DeserializeObject<Models.Medecin>(TempData["myMedecin"].ToString());
         }
         public IActionResult Index()
-        {
+        {      
             return View();
         }
         public IActionResult Empty()
         {
-            medecin = JsonConvert.DeserializeObject<Models.Medecin>(TempData["myMedecin"].ToString());
+            medecin = appDbContext.Medecins.Where(m => m.Mail.ToLower() == userManager.GetUserName(HttpContext.User).ToLower()).First();
             return View(medecin);
         }
         public IActionResult Information() 
         {
-                        medecin = JsonConvert.DeserializeObject<Models.Medecin>(TempData["myMedecin"].ToString());
-
-            //User.Identity.Name
+            medecin = appDbContext.Medecins.Where(m => m.Mail.ToLower() == userManager.GetUserName(HttpContext.User).ToLower()).First();
             return View(medecin); 
         }
         [HttpGet]
         public IActionResult Modifier()
         {
-            //Models.Medecin m = new Models.Medecin() { Nom = "Yasmine", Prenom = "Outtassi", Mail = "noureddinelhaj@gmail.com", Genre = "Male", Date = "13/05/1999", Ville = "Rimouski", Date_Entree = "19/10/2005" };
-
+            medecin = appDbContext.Medecins.Where(m => m.Mail.ToLower() == userManager.GetUserName(HttpContext.User).ToLower()).First();
             return View(medecin);
         }
         [HttpPost]
-        public IActionResult Modifier(Models.Medecin med)
+        public IActionResult Modifier(Medecin med)
         {
+            medecin = appDbContext.Medecins.Where(m => m.Mail.ToLower() == userManager.GetUserName(HttpContext.User).ToLower()).First();
+
             if (ModelState.IsValid)
             {
                 foreach(var item in med.GetType().GetProperties())
                 {
-                    var objValue = item.GetValue(medecin);
-                    var anotherValue = item.GetValue(med);
-                    if (!objValue.Equals(anotherValue) && anotherValue is not null) item.SetValue(this.medecin,anotherValue);
-                    TempData["myMedecin"] = JsonConvert.SerializeObject(medecin);
+                    if(item.Name != "MedecinId")
+                    {
+                        var objValue = item.GetValue(medecin);
+                        var anotherValue = item.GetValue(med);
+                        if (!objValue.Equals(anotherValue) && anotherValue is not null) item.SetValue(this.medecin, anotherValue);
+                    }            
                 }
+                appDbContext.SaveChanges();
                 return RedirectToAction("information", "home");
-                //ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
-            }
-                
+            }      
             return View(med);
         }
-        
+        [HttpGet]
+        public IActionResult AjoutPatient()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult AjoutPatient(PatientR patientform)
+        {
+            if (ModelState.IsValid)
+            {
+                Patient patient = new Patient { Nom = patientform.Nom, Prenom = patientform.Prenom, Ville = patientform.Ville, Genre = patientform.Genre, Date = patientform.Date };
+                appDbContext.Patients.Add(patient);
+                appDbContext.SaveChanges();
+                return RedirectToAction("informationPatient", "home",patient);
+            }
+            return View(patientform);
+        }
+        public IActionResult Diagnostic()
+        {
+            return View();
+        }
+        public IActionResult InformationPatient(Patient patient)
+        {
+            return View(patient);
+        }
+
     }
 }

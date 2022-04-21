@@ -18,6 +18,7 @@ namespace Tp2_Server.Controllers
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.appDbContext = appDbContext;
+            
         }
         [HttpPost]
         public async Task<ActionResult> Logout()
