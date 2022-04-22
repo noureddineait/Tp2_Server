@@ -25,6 +25,6 @@ var app = builder.Build();
 app.UseFileServer();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseMvc(routes => routes.MapRoute("Default", "{controller=Account}/{action=Index}"));
+app.UseMvc(routes => routes.MapRoute("Default", "{controller=Home}/{action=Diagnostic}"));
 
 app.Run();

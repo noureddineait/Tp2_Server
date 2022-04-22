@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Principal;
 using Tp2_Server.Models;
 using System.Web;
+using System.Dynamic;
+
 namespace Tp2_Server.Controllers
 {
     public class HomeController : Controller
@@ -80,6 +82,9 @@ namespace Tp2_Server.Controllers
         }
         public IActionResult Diagnostic()
         {
+            Patient patient = new Patient();
+            List<Patient> patients = appDbContext.Patients.ToList();
+            ViewBag.Patients = patients;
             return View();
         }
         public IActionResult InformationPatient(Patient patient)
