@@ -10,7 +10,7 @@ using System.Dynamic;
 namespace Tp2_Server.Controllers
 {
     public class HomeController : Controller
-    { 
+    {
         Medecin medecin;
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
@@ -23,7 +23,7 @@ namespace Tp2_Server.Controllers
             this.appDbContext = appDbContext;
         }
         public IActionResult Index()
-        {      
+        {
             return View();
         }
         public IActionResult Empty()
@@ -31,10 +31,10 @@ namespace Tp2_Server.Controllers
             medecin = appDbContext.Medecins.Where(m => m.Mail.ToLower() == userManager.GetUserName(HttpContext.User).ToLower()).First();
             return View(medecin);
         }
-        public IActionResult Information() 
+        public IActionResult Information()
         {
             medecin = appDbContext.Medecins.Where(m => m.Mail.ToLower() == userManager.GetUserName(HttpContext.User).ToLower()).First();
-            return View(medecin); 
+            return View(medecin);
         }
         [HttpGet]
         public IActionResult Modifier()
@@ -49,18 +49,18 @@ namespace Tp2_Server.Controllers
 
             if (ModelState.IsValid)
             {
-                foreach(var item in med.GetType().GetProperties())
+                foreach (var item in med.GetType().GetProperties())
                 {
-                    if(item.Name != "MedecinId")
+                    if (item.Name != "MedecinId")
                     {
                         var objValue = item.GetValue(medecin);
                         var anotherValue = item.GetValue(med);
                         if (!objValue.Equals(anotherValue) && anotherValue is not null) item.SetValue(this.medecin, anotherValue);
-                    }            
+                    }
                 }
                 appDbContext.SaveChanges();
                 return RedirectToAction("information", "home");
-            }      
+            }
             return View(med);
         }
         [HttpGet]
@@ -76,20 +76,58 @@ namespace Tp2_Server.Controllers
                 Patient patient = new Patient { Nom = patientform.Nom, Prenom = patientform.Prenom, Ville = patientform.Ville, Genre = patientform.Genre, Date = patientform.Date };
                 appDbContext.Patients.Add(patient);
                 appDbContext.SaveChanges();
-                return RedirectToAction("informationPatient", "home",patient);
+                return RedirectToAction("Diagnostic", "home", patient);
             }
             return View(patientform);
         }
-        public IActionResult Diagnostic()
+        [HttpGet]
+        public IActionResult Diagnostic(KNN knn)
         {
+            knn.Train("./wwwroot/train.csv", knn.k, knn.distance);
+            float result = knn.Evaluate("./wwwroot/test.csv");
+            Console.WriteLine(result);
+            ViewBag.Knn = knn;
             Patient patient = new Patient();
             List<Patient> patients = appDbContext.Patients.ToList();
+            if (patients.Count > 0)
+            {
+                ViewBag.Patients = patients;
+                return View();
+            }
+            patients.Add(patient);
             ViewBag.Patients = patients;
             return View();
+            Console.WriteLine(result);
+        }
+        [HttpPost]
+        public IActionResult Diagnostic(Diagnostic diagnostic, KNN knn)
+        {
+            if (ModelState.IsValid)
+            {
+
+                appDbContext.Diagnostics.Add(diagnostic);
+                return View();
+            }
+            return View(diagnostic);
         }
         public IActionResult InformationPatient(Patient patient)
         {
             return View(patient);
+        }
+        [HttpGet]
+        public IActionResult Configurer()
+        {
+
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Configurer(KNN kNN)
+        {
+
+            //kNN.Train("./wwwroot/train.csv",kNN.k,kNN.distance);
+            //kNN.Evaluate("./wwwroot/test.csv");
+            return RedirectToAction("Diagnostic", "home", kNN);
+
         }
 
     }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Tp2_Server.Migrations
 {
-    public partial class CreateDB : Migration
+    public partial class CreateDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -68,26 +68,6 @@ namespace Tp2_Server.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Diagnostics",
-                columns: table => new
-                {
-                    DiagnosticID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    cp = table.Column<float>(type: "float", nullable: false),
-                    ca = table.Column<float>(type: "float", nullable: false),
-                    oldpeak = table.Column<float>(type: "float", nullable: false),
-                    thal = table.Column<float>(type: "float", nullable: false),
-                    target = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Label = table.Column<bool>(type: "tinyint(1)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Diagnostics", x => x.DiagnosticID);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Medecins",
                 columns: table => new
                 {
@@ -111,6 +91,29 @@ namespace Tp2_Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Medecins", x => x.MedecinId);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Patients",
+                columns: table => new
+                {
+                    PatientId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Nom = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Prenom = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Date = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Ville = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Genre = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Patients", x => x.PatientId);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -242,31 +245,29 @@ namespace Tp2_Server.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Patients",
+                name: "Diagnostics",
                 columns: table => new
                 {
-                    PatientId = table.Column<int>(type: "int", nullable: false)
+                    DiagnosticID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    DiagnosticID = table.Column<int>(type: "int", nullable: true),
-                    Nom = table.Column<string>(type: "longtext", nullable: true)
+                    cp = table.Column<float>(type: "float", nullable: false),
+                    ca = table.Column<float>(type: "float", nullable: false),
+                    oldpeak = table.Column<float>(type: "float", nullable: false),
+                    thal = table.Column<float>(type: "float", nullable: false),
+                    target = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Prenom = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Date = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Ville = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Genre = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    PatientId = table.Column<int>(type: "int", nullable: false),
+                    Label = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Patients", x => x.PatientId);
+                    table.PrimaryKey("PK_Diagnostics", x => x.DiagnosticID);
                     table.ForeignKey(
-                        name: "FK_Patients_Diagnostics_DiagnosticID",
-                        column: x => x.DiagnosticID,
-                        principalTable: "Diagnostics",
-                        principalColumn: "DiagnosticID");
+                        name: "FK_Diagnostics_Patients_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patients",
+                        principalColumn: "PatientId",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -308,9 +309,10 @@ namespace Tp2_Server.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Patients_DiagnosticID",
-                table: "Patients",
-                column: "DiagnosticID");
+                name: "IX_Diagnostics_PatientId",
+                table: "Diagnostics",
+                column: "PatientId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -331,10 +333,10 @@ namespace Tp2_Server.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Medecins");
+                name: "Diagnostics");
 
             migrationBuilder.DropTable(
-                name: "Patients");
+                name: "Medecins");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -343,7 +345,7 @@ namespace Tp2_Server.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Diagnostics");
+                name: "Patients");
         }
     }
 }

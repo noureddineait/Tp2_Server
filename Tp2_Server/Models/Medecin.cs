@@ -7,13 +7,13 @@ namespace Tp2_Server.Models
         public int MedecinId { get; set; }
         public string? Nom { get; set; }
         public string? Prenom { get; set; }
-        
+
         [Display(Name = "Date de naissance")]
         [DataType(DataType.Date)]
         public string? Date { get; set; }
         public string? Genre { get; set; }
         public string? Mail { get; set; }
-        
+
         [Display(Name = "Date d'entrée en fonction")]
         [DataType(DataType.Date)]
         public string? Date_Entree { get; set; }

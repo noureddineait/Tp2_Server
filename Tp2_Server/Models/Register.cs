@@ -20,7 +20,7 @@ namespace Tp2_Server.Models
         [Display(Name = "Confirm Password")]
         [Compare("Password", ErrorMessage = "Password doesn't match.")]
         public string? ConfirmPassowrd { get; set; }
-        
+
         [Required]
         public string? Nom { get; set; }
 
@@ -28,7 +28,7 @@ namespace Tp2_Server.Models
         public string? Prenom { get; set; }
 
         [Required]
-        [Display(Name ="Date de naissance")]
+        [Display(Name = "Date de naissance")]
         [DataType(DataType.Date)]
         public string? Date { get; set; }
         [Required]

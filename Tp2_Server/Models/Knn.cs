@@ -20,7 +20,7 @@ namespace Tp2_Server.Models
     }
     public class KNN : IKNN
     {
-       
+
         public int k { get; set; }
         public int distance { get; set; }
         public List<Diagnostic> TrainData { get; set; }

@@ -13,21 +13,21 @@ namespace Tp2_Server.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly AppDbContext appDbContext;
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,AppDbContext appDbContext)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, AppDbContext appDbContext)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.appDbContext = appDbContext;
-            
+
         }
         [HttpPost]
         public async Task<ActionResult> Logout()
         {
             //HttpContext.Response.Cookies.Delete(".AspNetCore.Identity.cookies");
-            
+
             await signInManager.SignOutAsync();
             TempData.Remove("myMedecin");
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
 
 
@@ -91,7 +91,7 @@ namespace Tp2_Server.Controllers
 
                         return View(login);
                     }
-                    
+
                 }
 
                 ModelState.AddModelError(string.Empty, "Invalid Login Attempt");

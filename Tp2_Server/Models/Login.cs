@@ -14,7 +14,7 @@ namespace Tp2_Server.Models
         [DataType(DataType.Password)]
         public string? Password { get; set; }
 
-        
+
         [NotMapped]
         [Display(Name = "Remember me")]
         public bool RememberMe { get; set; }

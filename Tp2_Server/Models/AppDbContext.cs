@@ -25,8 +25,8 @@ namespace Tp2_Server.Models
                 "password=tp2_user;";
 
             dbContextOptionsBuilder.UseMySql(connextionString, ServerVersion.AutoDetect(connextionString));
-            
-            
+
+
 
         }
     }

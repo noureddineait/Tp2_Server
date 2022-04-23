@@ -220,6 +220,9 @@ namespace Tp2_Server.Migrations
                     b.Property<bool>("Label")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
                     b.Property<float>("ca")
                         .HasColumnType("float");
 
@@ -237,6 +240,9 @@ namespace Tp2_Server.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("DiagnosticID");
+
+                    b.HasIndex("PatientId")
+                        .IsUnique();
 
                     b.ToTable("Diagnostics");
                 });
@@ -282,9 +288,6 @@ namespace Tp2_Server.Migrations
                     b.Property<string>("Date")
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("DiagnosticID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Genre")
                         .HasColumnType("longtext");
 
@@ -298,8 +301,6 @@ namespace Tp2_Server.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("PatientId");
-
-                    b.HasIndex("DiagnosticID");
 
                     b.ToTable("Patients");
                 });
@@ -355,12 +356,19 @@ namespace Tp2_Server.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Tp2_Server.Models.Diagnostic", b =>
+                {
+                    b.HasOne("Tp2_Server.Models.Patient", "Patient")
+                        .WithOne("Diagnostic")
+                        .HasForeignKey("Tp2_Server.Models.Diagnostic", "PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Patient");
+                });
+
             modelBuilder.Entity("Tp2_Server.Models.Patient", b =>
                 {
-                    b.HasOne("Tp2_Server.Models.Diagnostic", "Diagnostic")
-                        .WithMany()
-                        .HasForeignKey("DiagnosticID");
-
                     b.Navigation("Diagnostic");
                 });
 #pragma warning restore 612, 618

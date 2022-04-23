@@ -12,42 +12,42 @@
     <title>@ViewBag.Title</title>
 </head>
 <body>
-    
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-            <button type="button" class="navbar-toggler" data-toggle="collapse" data-targer="#collapsibleNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id=""collapsibleNavbar">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="~/Account/Index">Home</a>    
-                    </li>
-                </ul>
-                <ul class="navbar-nav ms-auto">
-                    @if (signInManager.IsSignedIn(User))
+
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-targer="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="" collapsibleNavbar">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="~/Account/Index">Home</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                @if (signInManager.IsSignedIn(User))
                 {
                     <li class="nav-item">
                         <form method="post" asp-action="logout" asp-controller="Account">
-                            <button type="submit" class="nav-llink btn btn-link py-0"  syle="width:auto">
+                            <button type="submit" class="nav-llink btn btn-link py-0" syle="width:auto">
                                 Logout @User.Identity.Name
                             </button>
-                        </form>    
+                        </form>
                     </li>
                 }
                 else
                 {
                     <li class="nav-item">
-                        <a class="nav-link" href="~/Account/Register">Register</a>    
+                        <a class="nav-link" href="~/Account/Register">Register</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="~/Account/Login">Login</a>    
+                        <a class="nav-link" href="~/Account/Login">Login</a>
                     </li>
                 }
+                
+            </ul>
+        </div>
+    </nav>
 
-                </ul>
-            </div>
-        </nav>
-    
     <div class="container mt-5">
         @RenderBody()
     </div>

@@ -7,20 +7,62 @@
      Layout = "_Layout";
     ViewBag.Title = "Diagnostiquer";
 }
-@model Tp2_Server.Models.Patient
+@model Tp2_Server.Models.Diagnostic
 
-<div class="container">
+<div class="d-inline">
+    <h1 class="bg-info border d-flex aligns-items-center">vous utiliser un Knn de @ViewBag.Knn.k && @ViewBag.Knn.distance d'un resultat de </h1>
     <form method="post">
-    <select asp-for="PatientId" class="form-select mb-3 me-5 mt-3 col" aria-label="Default select example">
+        <div asp-validation-summary="All" class="text-danger"></div>
+                
+            
+        <select asp-for="PatientId" class="form-select mb-3 me-5 mt-3 col" aria-label="Default select example">
+            <option value="">Selectionnez Patient</option>
+            @if(ViewBag.Patients is not null){
             @foreach(var patient in ViewBag.Patients)
             {
                 <option value="@patient.PatientId">@patient.Nom  @patient.Prenom</option>
-            }
+            }}
         </select>
-    
+        <div class="d-flex flex-row">    
+        <div class="col-6">
+                <label asp-for="cp" class="mb-3 me-5 mt-4 col"></label> 
+            </div>
+           <div class="col">
+        <select asp-for="cp" class="form-select mb-3 me-5 mt-3 col" aria-label="Default select example">
+            <option selected value="">Selectionnez : </option>
+            <option value="1">Normale</option>
+            <option value="2">Défaut corrigé</option>
+            <option value="3">Défaut réversible</option>
 
+        </select>
+         </div>
+        </div>
+        <div class="d-flex flex-row">    
+        <div class="col-6">
+                <label asp-for="thal" class="mb-3 me-5 mt-4 col"></label> 
+            </div>
+        <div class="col">
+        <select asp-for="thal" class="form-select mb-3 me-5 mt-3 col-sm" aria-label="Default select example">
+            <option selected value="">Selectionnez : </option>
+            <option value="1">Angine typique</option>
+            <option value="2">Angine atypique</option>
+            <option value="3">Douleur non angineuse</option>
+            <option value="4">Asymptomatique</option>
+        </select>
+         </div>
+        </div>
+        <div class="form-floating mb-3 mt-3">
+              <input  class="form-control" asp-for="oldpeak" placeholder="Enter password confirmation" >
+              <label asp-for="oldpeak"></label>
+              <span asp-validation-for="oldpeak" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3 mt-3">
+              <input  class="form-control" asp-for="ca" placeholder="Enter password confirmation" >
+              <label asp-for="ca"></label>
+              <span asp-validation-for="ca" class="text-danger"></span>
+        </div>
 
-    <button type="submit" class="btn btn-primary">Test</button>
+        <button type="submit" class="btn btn-primary">Information</button>
     </form>
     <a class="btn btn-primary" href="~/Home/AjoutPatient">Ajouter un patient</a>
 </div>
