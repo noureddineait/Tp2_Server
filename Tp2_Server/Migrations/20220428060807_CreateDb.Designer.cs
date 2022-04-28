@@ -11,7 +11,7 @@ using Tp2_Server.Models;
 namespace Tp2_Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220422060847_CreateDb")]
+    [Migration("20220428060807_CreateDb")]
     partial class CreateDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -219,10 +219,13 @@ namespace Tp2_Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<bool>("Label")
+                    b.Property<int>("KnnId")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("Label")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("PatientId")
+                    b.Property<int>("PID")
                         .HasColumnType("int");
 
                     b.Property<float>("ca")
@@ -234,19 +237,32 @@ namespace Tp2_Server.Migrations
                     b.Property<float>("oldpeak")
                         .HasColumnType("float");
 
-                    b.Property<string>("target")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("target")
+                        .HasColumnType("int");
 
                     b.Property<float>("thal")
                         .HasColumnType("float");
 
                     b.HasKey("DiagnosticID");
 
-                    b.HasIndex("PatientId")
-                        .IsUnique();
-
                     b.ToTable("Diagnostics");
+                });
+
+            modelBuilder.Entity("Tp2_Server.Models.KNN", b =>
+                {
+                    b.Property<int>("KnnId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("distance")
+                        .HasColumnType("int");
+
+                    b.Property<int>("k")
+                        .HasColumnType("int");
+
+                    b.HasKey("KnnId");
+
+                    b.ToTable("KNNs");
                 });
 
             modelBuilder.Entity("Tp2_Server.Models.Medecin", b =>
@@ -290,6 +306,9 @@ namespace Tp2_Server.Migrations
                     b.Property<string>("Date")
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("DiagnosticID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Genre")
                         .HasColumnType("longtext");
 
@@ -303,6 +322,8 @@ namespace Tp2_Server.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("PatientId");
+
+                    b.HasIndex("DiagnosticID");
 
                     b.ToTable("Patients");
                 });
@@ -358,19 +379,12 @@ namespace Tp2_Server.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Tp2_Server.Models.Diagnostic", b =>
-                {
-                    b.HasOne("Tp2_Server.Models.Patient", "Patient")
-                        .WithOne("Diagnostic")
-                        .HasForeignKey("Tp2_Server.Models.Diagnostic", "PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Patient");
-                });
-
             modelBuilder.Entity("Tp2_Server.Models.Patient", b =>
                 {
+                    b.HasOne("Tp2_Server.Models.Diagnostic", "Diagnostic")
+                        .WithMany()
+                        .HasForeignKey("DiagnosticID");
+
                     b.Navigation("Diagnostic");
                 });
 #pragma warning restore 612, 618

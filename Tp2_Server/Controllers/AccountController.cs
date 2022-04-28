@@ -23,17 +23,14 @@ namespace Tp2_Server.Controllers
         [HttpPost]
         public async Task<ActionResult> Logout()
         {
-            //HttpContext.Response.Cookies.Delete(".AspNetCore.Identity.cookies");
-
             await signInManager.SignOutAsync();
-            TempData.Remove("myMedecin");
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Account");
         }
 
 
         [HttpGet]
         public IActionResult Register()
-        {
+        {            
             return View();
         }
         [HttpPost]
@@ -49,10 +46,7 @@ namespace Tp2_Server.Controllers
                     Medecin medecin = new Medecin { Nom = register.Nom, Prenom = register.Prenom, Mail = register.Email, Ville = register.Ville, Genre = register.Genre, Date = register.Date, Date_Entree = register.Date_Entree };
                     appDbContext.Medecins.Add(medecin);
                     appDbContext.SaveChanges();
-                    TempData["myMedecin"] = JsonConvert.SerializeObject(medecin);
-                    Console.WriteLine("");
-
-                    return RedirectToAction("empty", "home");
+                    return RedirectToAction("Configurer", "home");
                 }
 
                 foreach (var error in result.Errors)
@@ -81,19 +75,13 @@ namespace Tp2_Server.Controllers
                     try
                     {
                         Medecin medecin = appDbContext.Medecins.Where(m => m.Mail.ToLower() == login.Email.ToLower()).First();
-                        TempData["myMedecin"] = JsonConvert.SerializeObject(medecin);
-                        Console.WriteLine("");
-
-                        return RedirectToAction("empty", "home");
+                        return RedirectToAction("Configurer", "home");
                     }
                     catch (Exception)
                     {
-
                         return View(login);
                     }
-
                 }
-
                 ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
             }
 
@@ -102,6 +90,10 @@ namespace Tp2_Server.Controllers
 
         public IActionResult Index()
         {
+            if (signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("configurer", "home");
+            }
             return View();
         }
     }

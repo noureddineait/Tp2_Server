@@ -8,7 +8,7 @@
     ViewBag.Title = "Information";
 }
 @model Tp2_Server.Models.Medecin
-<h1 class="bg-info border d-flex aligns-items-center">Information de Mme.@Model.Nom </h1>
+<h1 class="bg-info border d-flex aligns-items-center">Information de @Model.Nom </h1>
 
 <div class="container-fluid">
     <div class="d-flex flex-row">
@@ -25,4 +25,6 @@
             <a class="btn btn-primary" href="~/Home/Modifier">Modifier</a>
         </div>
     </div>
+        <a class="btn btn-primary " href="~/Home/Configurer">Retour</a>
+
 </div>

@@ -18,14 +18,21 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="" collapsibleNavbar">
+            @if (signInManager.IsSignedIn(User))
+                {
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="~/Account/Index">Home</a>
+                    <a class="nav-link" href="~/Home/Configurer">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="~/Home/Information">Information</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="~/Home/Patients">Patients</a>
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto">
-                @if (signInManager.IsSignedIn(User))
-                {
+                
                     <li class="nav-item">
                         <form method="post" asp-action="logout" asp-controller="Account">
                             <button type="submit" class="nav-llink btn btn-link py-0" syle="width:auto">
@@ -33,18 +40,28 @@
                             </button>
                         </form>
                     </li>
-                }
+                
+                
+            </ul>
+            }
                 else
                 {
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                    <a class="nav-link" href="~/Account/Index">Home</a>
+                </li>
+                
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                
                     <li class="nav-item">
                         <a class="nav-link" href="~/Account/Register">Register</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="~/Account/Login">Login</a>
                     </li>
+                    </ul>
                 }
-                
-            </ul>
         </div>
     </nav>
 

@@ -13,7 +13,7 @@ namespace Tp2_Server.Models
         public DbSet<Diagnostic> Diagnostics { get; set; }
         public DbSet<Medecin> Medecins { get; set; }
         public DbSet<Patient> Patients { get; set; }
-        //public DbSet<KNN> KNNs { get; set; }
+        public DbSet<KNN> KNNs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
         {

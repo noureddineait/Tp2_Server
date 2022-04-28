@@ -1,5 +1,6 @@
 ﻿using CsvHelper.Configuration.Attributes;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Tp2_Server.Models
 {
@@ -7,7 +8,7 @@ namespace Tp2_Server.Models
         internal interface IDiagnostic
         {
             //float[] Features { get; }
-            bool Label { get; }
+            bool? Label { get; }
             void PrintInfo();
         }
     public class Diagnostic : IDiagnostic
@@ -38,17 +39,17 @@ namespace Tp2_Server.Models
         public float thal { get; set; }
         [Name("target")]
         
-        public string? target { get; set; }
+        public int target { get; set; }
         //private float[] _features = new float[5] { 0, 0, 0, 0, 0 };
-        [Ignore]
-        [Required]
-        public int PatientId { get; set; }
-        [Ignore]
+        [Ignore] 
+        public int PID { get; set; }
 
-        public Patient? Patient { get; set; }
-
+        [Ignore]
+        public int KnnId { get; set; }
+        
         //public float[] Features { get; }
-        public bool Label { get; set; }
+        
+        public bool? Label { get; set; }
         public void PrintInfo()
         {
             Console.WriteLine($"{thal} + {target}");

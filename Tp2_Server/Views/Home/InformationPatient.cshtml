@@ -8,7 +8,7 @@
     ViewBag.Title = "Information Patient";
 }
 @model Tp2_Server.Models.Patient
-<h1 class="bg-info border d-flex aligns-items-center">Information de @Model.Nom </h1>
+<h1 class="bg-info border d-flex aligns-items-center">Information du Patient @Model.Nom </h1>
 
 <div class="container-fluid">
     <div class="d-flex flex-row">
@@ -20,7 +20,16 @@
             <label class="fw-bold fs-3"><span class="text-primary">Date de Naissance : </span>@Model.Date</label>
             <label class="fw-bold fs-3"><span class="text-primary">Genre : </span>@Model.Genre</label>
             <label class="fw-bold fs-3"><span class="text-primary">Ville : </span>@Model.Ville</label>
-            <a class="btn btn-primary" href="~/Home/AjoutPatient">Retour</a>
+
+            <div>
+                <label class="fw-bold fs-3">@ViewBag.Result </label>
+            </div>
+            <a class="btn btn-primary" href="~/Home/Patients">Retour</a>
         </div>
+        
     </div>
+    <form method="post">
+            <input type="submit" value="Supprimer" name="submit" class="btn btn-danger"/>
+            <input type="submit" value="Liste De Diagnostique" name="submit" class="btn btn-success"/>            
+    </form>
 </div>

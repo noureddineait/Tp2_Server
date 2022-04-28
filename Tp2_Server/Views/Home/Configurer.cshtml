@@ -5,21 +5,25 @@
 
 @{
     Layout = "_Layout";
-    ViewBag.Title = "Empty";
+    ViewBag.Title = "Configuration IA";
 }
 @model Tp2_Server.Models.KNN
+<h1 class="bg-info border d-flex aligns-items-center">Veuillez configurer l'IA avant de diagnostiquer : </h1>
 <div class="container">
-    <form method="post">
+    <form asp-action="Configurer">
         <div class="form-floating me-3 mb-3 mt-3 col">
             <input type="text" class="form-control" asp-for="k" placeholder="Enter password confirmation">
             <label asp-for="k"></label>
             <span asp-validation-for="k" class="text-danger"></span>
         </div>
-        <div class="form-floating me-3 mb-3 mt-3 col">
-            <input type="text" class="form-control" asp-for="distance" placeholder="Enter password confirmation">
-            <label asp-for="distance"></label>
-            <span asp-validation-for="distance" class="text-danger"></span>
-        </div>
-        <button type="submit" class="btn btn-primary">Information</button>
+        <div >
+        <select asp-for="distance" class="form-select mb-3 me-5 mt-3 col" aria-label="Default select example">
+            <option selected value="">Selectionnez : </option>
+            <option value="0">Euclidean</option>
+            <option value="1">Manhattan</option>
+
+        </select>
+         </div>
+    <button type="submit" class="btn btn-primary">Configurer</button>
     </form>
 </div>

@@ -1,5 +1,7 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using CsvHelper.Configuration.Attributes;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
 namespace Tp2_Server.Models
@@ -23,7 +25,10 @@ namespace Tp2_Server.Models
 
         public int k { get; set; }
         public int distance { get; set; }
-        public List<Diagnostic> TrainData { get; set; }
+        
+        [NotMapped]
+        public List<Diagnostic>? TrainData { get; set; }
+        public int KnnId { get; set; }
         public bool Predict(Diagnostic sample_to_predict)
         {
             List<bool> labels;
@@ -41,7 +46,7 @@ namespace Tp2_Server.Models
                 {
                     distances.Add(ManhattanDistance(sample_to_predict, sampleTrain));
                 }
-                labels.Add(this.TrainData[i].target == "0" ? false : true);
+                labels.Add(this.TrainData[i].target == 0 ? false : true);
             }
             ShellSort(distances, labels);
 
@@ -75,11 +80,11 @@ namespace Tp2_Server.Models
                         distances.Add(EuclideanDistance(sampleFoo, sampleTrain));
                     else
                         distances.Add(ManhattanDistance(sampleFoo, sampleTrain));
-                    labels.Add(this.TrainData[i].target == "0" ? false : true);
+                    labels.Add(this.TrainData[i].target == 0 ? false : true);
                 }
                 ShellSort(distances, labels);
                 result = Vote(labels.GetRange(0, k));
-                if (result == (eval.target == "0" ? false : true))
+                if (result == (eval.target == 0 ? false : true))
                 {
                     taux++;
                 }

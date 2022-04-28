@@ -1,0 +1,27 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Liste de diagnostics";
+}
+@model Tp2_Server.Models.Diagnostic
+@foreach(var t in ViewBag.DiagnosticsText){
+    <div><label>@t </label></div>
+}
+<form method="post">  
+        
+    <select asp-for="DiagnosticID" class="form-select mb-3 me-5 mt-3 col" aria-label="Default select example">
+        <option selected value="">Selectionnez : </option>
+        @foreach(Tp2_Server.Models.Diagnostic P in ViewBag.Diagnostics)
+        {
+        <option value="@P.DiagnosticID">@P.DiagnosticID</option>
+        }
+    </select>
+     <div class="form-floating me-3 mb-3 mt-3 col">
+        <input  type="submit" class="btn btn-danger m-3" name="submit" value="Supprimer"/>
+        <input  type="submit" class="btn btn-primary m-3" name="submit" value="Retour"/>
+     </div>
+</form>
