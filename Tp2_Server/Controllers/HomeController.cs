@@ -78,12 +78,12 @@ namespace Tp2_Server.Controllers
         public IActionResult Diagnostic(KNN knn)
         {
             //knn.Train("./wwwroot/train.csv", knn.k, knn.distance);
-            KNN knn2 = appDbContext.KNNs.Where(k => k.k == knn.k && k.distance == knn.distance).First();
-            knn2.Train("./wwwroot/train.csv", knn2.k, knn2.distance);
-            float result = knn2.Evaluate("./wwwroot/test.csv");
+            //KNN knn2 = appDbContext.KNNs.Where(k => k.k == knn.k && k.distance == knn.distance).First();
+            knn.Train("./wwwroot/train.csv", knn.k, knn.distance);
+            float result = knn.Evaluate("./wwwroot/test.csv");
             ViewBag.Resultat = result;
-            ViewBag.Knn = knn2;
-            Diagnostic diagnostic = new Diagnostic() { KnnId = knn2.KnnId};
+            ViewBag.Knn = knn;
+            Diagnostic diagnostic = new Diagnostic() { k = knn.k , distance =  knn.distance};
             List<Patient> patients = appDbContext.Patients.ToList();
             if (patients.Count > 0)
             {
@@ -98,11 +98,11 @@ namespace Tp2_Server.Controllers
             Console.WriteLine(diagnostic);
         }
         [HttpPost]
-        public IActionResult Diagnostic(Diagnostic diagnostic)
+        public IActionResult Diagnostic(Diagnostic diagnostic,string submit)
         {
             Console.WriteLine("");
-            KNN knn = appDbContext.KNNs.Find(diagnostic.KnnId);
-            knn.Train("./wwwroot/train.csv", knn.k, knn.distance);
+            KNN knn = new KNN();
+            knn.Train("./wwwroot/train.csv", diagnostic.k, diagnostic.distance);
             float result = knn.Evaluate("./wwwroot/test.csv");
             ViewBag.Resultat = result;
             ViewBag.Knn = knn;
@@ -111,13 +111,15 @@ namespace Tp2_Server.Controllers
             
             patients.Add(patient);
             ViewBag.Patients = patients;
-            ModelState.Remove("KNN.TrainData");
-            
+            if(submit == "Diagnostiquer")
+            {
+                ModelState.Remove("KNN.TrainData");
+
                 if (ModelState.IsValid)
                 {
                     Patient patientD = appDbContext.Patients.Find(diagnostic.PID);
-                    Diagnostic diagnostic1 = new Diagnostic() { ca = diagnostic.ca, cp = diagnostic.cp, oldpeak = diagnostic.oldpeak, thal = diagnostic.thal, PID = diagnostic.PID, KnnId = diagnostic.KnnId };
-                
+                    Diagnostic diagnostic1 = new Diagnostic() { ca = diagnostic.ca, cp = diagnostic.cp, oldpeak = diagnostic.oldpeak, thal = diagnostic.thal, PID = diagnostic.PID, k = diagnostic.k, distance = diagnostic.distance };
+
                     if (knn.Predict(diagnostic1))
                     {
                         diagnostic1.target = 1;
@@ -130,10 +132,25 @@ namespace Tp2_Server.Controllers
                     }
                     appDbContext.Diagnostics.Add(diagnostic1);
                     appDbContext.SaveChanges();
-                    return RedirectToAction("informationPatient",patientD);
+                    return RedirectToAction("informationPatient", patientD);
                 }
-            return View();
+                return View();
+            }
+            else if(submit == "Information")
+            {
+                if (diagnostic.PID != 0)
+                {
+                    Patient patientSelected = appDbContext.Patients.Find(diagnostic.PID);
+                    return RedirectToAction("InformationPatient", patientSelected);
+                }
+                else
+                {
+                    return View();
+                }
+                
+            }
 
+            return View();
 
 
         }
@@ -194,16 +211,8 @@ namespace Tp2_Server.Controllers
             
             if (ModelState.IsValid)
             {
-                if (appDbContext.KNNs.Where(m => m.distance == kNN.distance && m.k == kNN.k).Count()==0)
-                {
-                    appDbContext.KNNs.Add(kNN);
-                    appDbContext.SaveChanges();
-                    return RedirectToAction("Diagnostic", "home", kNN);
-                    
-                    
-                }
-                KNN kNN1 = appDbContext.KNNs.Where(m => m.distance == kNN.distance && m.k == kNN.k).First();
-                return RedirectToAction("Diagnostic", "home", kNN1);
+                
+                return RedirectToAction("Diagnostic", "home", kNN);
 
             }
             return View(kNN);
@@ -235,9 +244,9 @@ namespace Tp2_Server.Controllers
             if (diagnostics.Count > 0) {
                 foreach (var t in diagnostics)
                 {
-                    KNN knn = appDbContext.KNNs.Find(t.KnnId);
+                    //KNN knn = appDbContext.KNNs.Find(t.KnnId);
                     string distance = "";
-                    if (knn.distance==0)
+                    if (t.distance==0)
                     {
                         distance = "Euclidean";
                     }
@@ -247,7 +256,7 @@ namespace Tp2_Server.Controllers
                     {
                         maladie = "Malade";
                     } else maladie = "Non malade";
-                    results.Add($"{t.DiagnosticID} || cp = {t.cp} || ca = {t.ca} || oldpeak = {t.oldpeak} || thal = {t.thal} || {maladie} || K = {knn.k} || distance = {distance}");
+                    results.Add($"{t.DiagnosticID} || cp = {t.cp} || ca = {t.ca} || oldpeak = {t.oldpeak} || thal = {t.thal} || {maladie} || K = {t.k} || distance = {distance}");
                 }
             }
             ViewBag.Diagnostics = diagnostics;
@@ -263,9 +272,9 @@ namespace Tp2_Server.Controllers
             {
                 foreach (var t in diagnostics)
                 {
-                    KNN knn = appDbContext.KNNs.Find(t.KnnId);
+                    //KNN knn = appDbContext.KNNs.Find(t.KnnId);
                     string distance = "";
-                    if (knn.distance == 0)
+                    if (t.distance == 0)
                     {
                         distance = "Euclidean";
                     }
@@ -276,20 +285,25 @@ namespace Tp2_Server.Controllers
                         maladie = "Malade";
                     }
                     else maladie = "Non malade";
-                    results.Add($"{t.DiagnosticID} || cp = {t.cp} || ca = {t.ca} || oldpeak = {t.oldpeak} || thal = {t.thal} || {maladie} || K = {knn.k} || distance = {distance}");
+                    results.Add($"{t.DiagnosticID} || cp = {t.cp} || ca = {t.ca} || oldpeak = {t.oldpeak} || thal = {t.thal} || {maladie} || K = {t.k} || distance = {distance}");
                 }
             }
             ViewBag.DiagnosticsText = results;
             ViewBag.Diagnostics = diagnostics;
             if(submit == "Supprimer")
             {
-                if (diagnostic.DiagnosticID != 0)
-                {
-                    Diagnostic diagnosticS = appDbContext.Diagnostics.Find(diagnostic.DiagnosticID);
-                    appDbContext.Diagnostics.Remove(diagnosticS);
-                    appDbContext.SaveChanges();
-                    return RedirectToAction("ListDiagnostics",patient);
-                }
+                
+                    if (diagnostic.DiagnosticID != 0)
+                    {
+                        Diagnostic diagnosticS = appDbContext.Diagnostics.Find(diagnostic.DiagnosticID);
+                        appDbContext.Diagnostics.Remove(diagnosticS);
+                        appDbContext.SaveChanges();
+                        return RedirectToAction("ListDiagnostics", patient);
+                    }
+                
+                    return View();
+                
+                
             }
             else if(submit == "Retour")
             {

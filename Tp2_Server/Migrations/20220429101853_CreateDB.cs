@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Tp2_Server.Migrations
 {
-    public partial class CreateDb : Migration
+    public partial class CreateDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -79,27 +79,13 @@ namespace Tp2_Server.Migrations
                     thal = table.Column<float>(type: "float", nullable: false),
                     target = table.Column<int>(type: "int", nullable: false),
                     PID = table.Column<int>(type: "int", nullable: false),
-                    KnnId = table.Column<int>(type: "int", nullable: false),
+                    k = table.Column<int>(type: "int", nullable: false),
+                    distance = table.Column<int>(type: "int", nullable: false),
                     Label = table.Column<bool>(type: "tinyint(1)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Diagnostics", x => x.DiagnosticID);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "KNNs",
-                columns: table => new
-                {
-                    KnnId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    k = table.Column<int>(type: "int", nullable: false),
-                    distance = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_KNNs", x => x.KnnId);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -345,9 +331,6 @@ namespace Tp2_Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
-                name: "KNNs");
 
             migrationBuilder.DropTable(
                 name: "Medecins");

@@ -11,8 +11,8 @@ using Tp2_Server.Models;
 namespace Tp2_Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220428060807_CreateDb")]
-    partial class CreateDb
+    [Migration("20220429101853_CreateDB")]
+    partial class CreateDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -219,9 +219,6 @@ namespace Tp2_Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("KnnId")
-                        .HasColumnType("int");
-
                     b.Property<bool?>("Label")
                         .HasColumnType("tinyint(1)");
 
@@ -233,6 +230,12 @@ namespace Tp2_Server.Migrations
 
                     b.Property<float>("cp")
                         .HasColumnType("float");
+
+                    b.Property<int>("distance")
+                        .HasColumnType("int");
+
+                    b.Property<int>("k")
+                        .HasColumnType("int");
 
                     b.Property<float>("oldpeak")
                         .HasColumnType("float");
@@ -246,23 +249,6 @@ namespace Tp2_Server.Migrations
                     b.HasKey("DiagnosticID");
 
                     b.ToTable("Diagnostics");
-                });
-
-            modelBuilder.Entity("Tp2_Server.Models.KNN", b =>
-                {
-                    b.Property<int>("KnnId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("distance")
-                        .HasColumnType("int");
-
-                    b.Property<int>("k")
-                        .HasColumnType("int");
-
-                    b.HasKey("KnnId");
-
-                    b.ToTable("KNNs");
                 });
 
             modelBuilder.Entity("Tp2_Server.Models.Medecin", b =>

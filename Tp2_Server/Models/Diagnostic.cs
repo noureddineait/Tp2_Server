@@ -45,10 +45,12 @@ namespace Tp2_Server.Models
         public int PID { get; set; }
 
         [Ignore]
-        public int KnnId { get; set; }
-        
+        public int k { get; set; }
+        [Ignore]
+        public int distance { get; set; }
+
         //public float[] Features { get; }
-        
+
         public bool? Label { get; set; }
         public void PrintInfo()
         {
