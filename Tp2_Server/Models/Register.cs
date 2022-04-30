@@ -42,5 +42,7 @@ namespace Tp2_Server.Models
         [Required]
         public string? Ville { get; set; }
 
+        public int? MedecinID { get; set; }
+
     }
 }

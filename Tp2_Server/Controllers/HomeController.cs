@@ -67,7 +67,8 @@ namespace Tp2_Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                Patient patient = new Patient { Nom = patientform.Nom, Prenom = patientform.Prenom, Ville = patientform.Ville, Genre = patientform.Genre, Date = patientform.Date };
+                medecin = appDbContext.Medecins.Where(m => m.Mail.ToLower() == userManager.GetUserName(HttpContext.User).ToLower()).First();
+                Patient patient = new Patient { Nom = patientform.Nom, Prenom = patientform.Prenom, Ville = patientform.Ville, Genre = patientform.Genre, Date = patientform.Date,MID=medecin.MedecinId };
                 appDbContext.Patients.Add(patient);
                 appDbContext.SaveChanges();
                 return RedirectToAction("InformationPatient", patient);
@@ -84,7 +85,8 @@ namespace Tp2_Server.Controllers
             ViewBag.Resultat = result;
             ViewBag.Knn = knn;
             Diagnostic diagnostic = new Diagnostic() { k = knn.k , distance =  knn.distance};
-            List<Patient> patients = appDbContext.Patients.ToList();
+            medecin = appDbContext.Medecins.Where(m => m.Mail.ToLower() == userManager.GetUserName(HttpContext.User).ToLower()).First();
+            List<Models.Patient> patients = appDbContext.Patients.Where(p => p.MID == medecin.MedecinId).ToList();
             if (patients.Count > 0)
             {
                 //TempData["Knn"] = JsonConvert.SerializeObject(knn2);
@@ -107,8 +109,9 @@ namespace Tp2_Server.Controllers
             ViewBag.Resultat = result;
             ViewBag.Knn = knn;
             Patient patient = new Patient();
-            List<Patient> patients = appDbContext.Patients.ToList();
-            
+            medecin = appDbContext.Medecins.Where(m => m.Mail.ToLower() == userManager.GetUserName(HttpContext.User).ToLower()).First();
+            List<Models.Patient> patients = appDbContext.Patients.Where(p => p.MID == medecin.MedecinId).ToList();
+
             patients.Add(patient);
             ViewBag.Patients = patients;
             if(submit == "Diagnostiquer")
@@ -220,14 +223,16 @@ namespace Tp2_Server.Controllers
         }
         public IActionResult Patients()
         {
-            List<Models.Patient> patients = appDbContext.Patients.ToList();
+            medecin = appDbContext.Medecins.Where(m => m.Mail.ToLower() == userManager.GetUserName(HttpContext.User).ToLower()).First();
+            List<Models.Patient> patients = appDbContext.Patients.Where(p=>p.MID == medecin.MedecinId).ToList();
             ViewBag.Patients = patients;
             return View();
         }
         [HttpPost]
         public IActionResult Patients(Patient patient)
         {
-            List<Models.Patient> patients = appDbContext.Patients.ToList();
+            medecin = appDbContext.Medecins.Where(m => m.Mail.ToLower() == userManager.GetUserName(HttpContext.User).ToLower()).First();
+            List<Models.Patient> patients = appDbContext.Patients.Where(p=>p.MID == medecin.MedecinId).ToList();
             ViewBag.Patients = patients;
             if (patient.PatientId != 0)
             {

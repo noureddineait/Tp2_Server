@@ -11,8 +11,8 @@ using Tp2_Server.Models;
 namespace Tp2_Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220429101853_CreateDB")]
-    partial class CreateDB
+    [Migration("20220430194723_createDb")]
+    partial class createDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -297,6 +297,9 @@ namespace Tp2_Server.Migrations
 
                     b.Property<string>("Genre")
                         .HasColumnType("longtext");
+
+                    b.Property<int?>("MID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nom")
                         .HasColumnType("longtext");

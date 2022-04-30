@@ -77,14 +77,14 @@ namespace Tp2_Api.Controllers
                 UserName = model.Email
             };
             var result = await _userManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
+            if (result.Succeeded)
             {
                 Medecin medecin = new Medecin() { Nom = model.Nom, Prenom = model.Prenom, Mail = model.Email, Ville = model.Ville, Genre = model.Genre, Date = model.Date, Date_Entree = model.Date_Entree };
                 appDbContext.Medecins.Add(medecin);
                 appDbContext.SaveChanges();
-                return StatusCode(StatusCodes.Status500InternalServerError, new { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+                return Ok(new { Status = "Success", Message = "User created successfully!" });
             }
-            return Ok(new { Status = "Success", Message = "User created successfully!" });
+            return StatusCode(StatusCodes.Status500InternalServerError, new { Status = "Error", Message = "User creation failed! Please check user details and try again." });
         }
         
         
@@ -131,7 +131,9 @@ namespace Tp2_Api.Controllers
         [Route("Patients")]
         public IActionResult GetPatients()
         {
-            List<Patient> patients = appDbContext.Patients.ToList();
+            var currentUser = HttpContext.User;
+            var medecin = appDbContext.Medecins.Where(m => m.Mail.ToUpper() == currentUser.Identity.Name.ToLower()).First();
+            List<Patient> patients = appDbContext.Patients.Where(p=>p.MID == medecin.MedecinId).ToList();
             return Ok(patients);
         }
         [HttpPost, Authorize]
@@ -140,15 +142,13 @@ namespace Tp2_Api.Controllers
         {
             try
             {
-                Patient patient = new Patient() { Date=model.Date,Nom=model.Nom,Prenom = model.Prenom, Genre=model.Genre,Ville=model.Ville};
+                Patient patient = new Patient() { Date=model.Date,Nom=model.Nom,Prenom = model.Prenom, Genre=model.Genre,Ville=model.Ville,MID=model.MID};
                 appDbContext.Patients.Add(patient);
                 appDbContext.SaveChanges();
                 return Ok(patient);
             }
             catch (Exception)
             {
-
-
             }
 
             return BadRequest();

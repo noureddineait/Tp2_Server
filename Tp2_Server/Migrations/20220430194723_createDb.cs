@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Tp2_Server.Migrations
 {
-    public partial class CreateDB : Migration
+    public partial class createDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -259,7 +259,8 @@ namespace Tp2_Server.Migrations
                     Ville = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Genre = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    MID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {

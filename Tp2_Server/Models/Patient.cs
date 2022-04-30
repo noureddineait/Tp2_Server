@@ -15,6 +15,7 @@
 
         public string? Genre { get; set; }
 
+        public int? MID { get; set; }
         public bool IsValid()
         {
             return (!string.IsNullOrEmpty(this.Nom) &&

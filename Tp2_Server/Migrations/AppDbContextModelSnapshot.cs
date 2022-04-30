@@ -296,6 +296,9 @@ namespace Tp2_Server.Migrations
                     b.Property<string>("Genre")
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("MID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Nom")
                         .HasColumnType("longtext");
 

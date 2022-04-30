@@ -23,6 +23,7 @@ namespace Tp2_Server.Models
         public string? Ville { get; set; }
         [Required]
         public string? Genre { get; set; }
+        public int? MID { get; set; }
 
         public bool IsValid()
         {
